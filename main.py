@@ -33,5 +33,5 @@ class MyBot(commands.Bot):
 
 # MyBotのインスタンス化及び起動処理。
 if __name__ == '__main__':
-    bot = MyBot(command_prefix='!') # command_prefixはコマンドの最初の文字として使うもの。 e.g. !ping
-    bot.run(os.environ["TOKEN"]) # Botのトークン
+    bot = MyBot(command_prefix='!coc')
+    bot.run(os.environ["TOKEN"]) # botトークンを環境変 TOKEN を使う
