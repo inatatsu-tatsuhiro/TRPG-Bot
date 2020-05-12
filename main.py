@@ -33,5 +33,5 @@ class MyBot(commands.Bot):
 
 # MyBotのインスタンス化及び起動処理。
 if __name__ == '__main__':
-    bot = MyBot(command_prefix='!coc')
+    bot = MyBot(command_prefix='!')
     bot.run(os.environ["TOKEN"]) # botトークンを環境変 TOKEN を使う
