@@ -1,41 +1,67 @@
 from discord.ext import commands # Bot Commands Frameworkのインポート
 import random
 
-# コグとして用いるクラスを定義。
 class CthulhuCog(commands.Cog):
 
-    # TestCogクラスのコンストラクタ。Botを受取り、インスタンス変数として保持。
     def __init__(self, bot):
+        
         self.bot = bot
 
-    # コマンドの作成。コマンドはcommandデコレータで必ず修飾する。
     @commands.group()
     async def coc(self, ctx):
         if ctx.invoked_subcommand is None:
-           await ctx.send('サブコマンドを入力してください。')
+           await ctx.send('正しいサブコマンドを入力してください。')
+    
+    # @commands.command()
+    # async def dice(self, ctx, args):
+    #     await ctx.send('ダイス')
 
 
-    @coc.command()
-    async def dice(self, ctx):
-        await ctx.send(str(diceroll(3,6)))
+    @coc.command(aliases=['d'])
+    async def dice(self, ctx, d_count=3, d_max=6):
+        await ctx.send(ctx.author.name + "さんの" + str(d_count) + "D" + str(d_max) +"\n" + diceroll(d_count,d_max))
 
-#     def diceroll(count, max):
-#         # result = []
-#         # for i in range(int(count)):
-#         #     result[i] = random.random() * int(max) + 1
-#         return 1
-# # Bot本体側からコグを読み込む際に呼び出される関数。
+    @coc.command(aliases=['h'])
+    async def help(self, ctx):
+        await ctx.send(printhelp())
+    
+    @coc.command(aliases=['dd'])
+    async def d100(self, ctx, limit=-1):
+        r = _random(100)
+        # ctx.send(ctx.author.name + "さんの1D100の結果は : " + str(r))
+        if limit == -1:
+            await ctx.send(ctx.author.name + "さんの 1D100の結果は" + str(r) + "です")
+        else:
+            if r <= limit and r <= 5:
+                await ctx.send(ctx.author.name + "さんの 1D100の結果は" + str(r) + "でクリティカルです")
+            elif r <= limit:
+                await ctx.send(ctx.author.name + "さんの 1D100の結果は" + str(r) + "で成功です")
+            elif limit < r and 96 <= r:
+                await ctx.send(ctx.author.name + "さんの 1D100の結果は" + str(r) + "でファンブルです")
+            else :
+                await ctx.send(ctx.author.name + "さんの 1D100の結果は" + str(r) + "で失敗です")
+            
+            
+
+
 def setup(bot):
-    bot.add_cog(CthulhuCog(bot)) # TestCogにBotを渡してインスタンス化し、Botにコグとして登録する。
+    bot.add_cog(CthulhuCog(bot))
 
 
-def diceroll(count, max):
+def diceroll(d_count, d_max):
     result = ""
     num = 0
-    for i in range(int(count)):
-        rand = int(random.random() * int(max) + 1)
+    for i in range(int(d_count)):
+        rand = _random(d_max)
         msg = str(i+1) + "回目：" + str(rand) + "\n"
         num += rand
         result += msg
-    result += "結果:" + str(num) + "です" 
+    result += "結果:" + str(num)
     return result
+
+def _random(d_max):
+    return int(random.random() * int(d_max) + 1)
+
+
+def printhelp():
+    return "```!coc help [h] : ヘルプの表示 \n!coc dice [d] dice_count dice_max : dice_count D dice_max を実行する、初期値(省略時)3D6 ex) !coc d -> 3D6 , !coc dice 2 6 -> 2D6 ```"
