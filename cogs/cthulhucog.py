@@ -64,4 +64,4 @@ def _random(d_max):
 
 
 def printhelp():
-    return "```!coc help [h] : ヘルプの表示 \n!coc dice [d] dice_count dice_max : dice_count D dice_max を実行する、初期値(省略時)3D6 ex) !coc d -> 3D6 , !coc dice 2 6 -> 2D6 ```"
+    return "```[botのヘルプ]\n\n!coc help [h] : ヘルプの表示 \n!coc dice [d] <dice_count> <dice_max> : dice_count D dice_max を実行する、初期値(省略時)3D6 ex) !coc d -> 3D6 , !coc dice 2 6 -> 2D6 \n!coc d100 [dd] <limit> : 1D100を実行しlimitを指定した場合成功判定を行う \n\n[]はコマンドの省略記法, <>は引数が省略可能であることを示す```"
