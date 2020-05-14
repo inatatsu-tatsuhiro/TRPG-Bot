@@ -11,11 +11,6 @@ class CthulhuCog(commands.Cog):
     async def coc(self, ctx):
         if ctx.invoked_subcommand is None:
            await ctx.send('正しいサブコマンドを入力してください。')
-    
-    # @commands.command()
-    # async def dice(self, ctx, args):
-    #     await ctx.send('ダイス')
-
 
     @coc.command(aliases=['d'])
     async def dice(self, ctx, d_count=3, d_max=6):
