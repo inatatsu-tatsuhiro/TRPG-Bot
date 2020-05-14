@@ -19,7 +19,7 @@ class CthulhuCog(commands.Cog):
 
     @coc.command(aliases=['d'])
     async def dice(self, ctx, d_count=3, d_max=6):
-        await ctx.send(ctx.author.name + "さんの" + str(d_count) + "D" + str(d_max) +"\n" + diceroll(d_count,d_max))
+        await ctx.send(f'{ctx.author.name}さんの{d_count}D{d_max}\n{diceroll(d_count,d_max)}')
 
     @coc.command(aliases=['h'])
     async def help(self, ctx):
@@ -28,18 +28,17 @@ class CthulhuCog(commands.Cog):
     @coc.command(aliases=['dd'])
     async def d100(self, ctx, limit=-1):
         r = _random(100)
-        # ctx.send(ctx.author.name + "さんの1D100の結果は : " + str(r))
         if limit == -1:
-            await ctx.send(ctx.author.name + "さんの 1D100の結果は" + str(r) + "です")
+            await ctx.send(f'{ctx.author.name}さんの1D100の結果は{r}です')
         else:
             if r <= limit and r <= 5:
-                await ctx.send(ctx.author.name + "さんの 1D100の結果は" + str(r) + "でクリティカルです")
+                await ctx.send(f'{ctx.author.name}さんの1D100の結果は{r}でクリティカルです')
             elif r <= limit:
-                await ctx.send(ctx.author.name + "さんの 1D100の結果は" + str(r) + "で成功です")
+                await ctx.send(f'{ctx.author.name}さんの1D100の結果は{r}で成功です')
             elif limit < r and 96 <= r:
-                await ctx.send(ctx.author.name + "さんの 1D100の結果は" + str(r) + "でファンブルです")
+                await ctx.send(f'{ctx.author.name}さんの1D100の結果は{r}でファンブルです')
             else :
-                await ctx.send(ctx.author.name + "さんの 1D100の結果は" + str(r) + "で失敗です")
+                await ctx.send(f'{ctx.author.name}さんの1D100の結果は{r}で失敗です')
             
             
 
@@ -53,10 +52,10 @@ def diceroll(d_count, d_max):
     num = 0
     for i in range(int(d_count)):
         rand = _random(d_max)
-        msg = str(i+1) + "回目：" + str(rand) + "\n"
+        msg = f'{i+1}回目：{rand}\n'
         num += rand
         result += msg
-    result += "結果:" + str(num)
+    result += f'結果:{num}'
     return result
 
 def _random(d_max):
