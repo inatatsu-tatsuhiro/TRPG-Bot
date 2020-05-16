@@ -45,6 +45,20 @@ class GameStatus(commands.Cog):
         self.bot.game.status = Status.PLAYING
         await ctx.send('セッション開始しました')
 
+    
+    @commands.command()
+    async def close(self, ctx):
+        """セッション終了"""
+        if self.bot.game.status == Status.NOTHING:
+            await ctx.send('セッションが立ってません')
+            return
+        if self.bot.game.status == Status.WAITING:
+            self.bot.game.status = Status.NOTHING
+            await ctx.send('セッションをキャンセルします')
+            return
+        self.bot.game.status = Status.NOTHING
+        await ctx.send('セッションを終了します')
+
 
 
 def setup(bot):
