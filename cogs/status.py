@@ -1,10 +1,10 @@
 from discord.ext import commands
-from enum import Enum
+from enum import Enum, auto
 
 class Status(Enum):
-    NOTHING = 1
-    WAITING = 2
-    PLAYING = 3
+    NOTHING = auto()
+    WAITING = auto()
+    PLAYING = auto()
 
 class GameStatus(commands.Cog):
     def __init__(self, bot):
@@ -29,7 +29,6 @@ class GameStatus(commands.Cog):
         
         self.bot.game.status = Status.WAITING
         self.bot.game.channel = ctx.channel
-        print('セッションの準備を開始します')
         await ctx.send('セッションの準備を開始します')
 
 
@@ -42,6 +41,21 @@ class GameStatus(commands.Cog):
         if self.bot.game.status == Status.PLAYING:
             await ctx.send('セッション中です')
             return
+        await ctx.send(f'{self.bot.game.status=}')
+        await ctx.send(f'{Status.NOTHING=}')
+        await ctx.send(f'{type(self.bot.game.status)=}')
+        await ctx.send(f'{type(Status.NOTHING)=}')
+        tmp = Status.NOTHING
+        await ctx.send(f'{tmp=}')
+        await ctx.send(f'{id(tmp)=}')
+        await ctx.send(f'{id(self.bot.game.status)=}')
+        await ctx.send(f'{id(Status.NOTHING)=}')
+        await ctx.send(f'{self.bot.game.status.value == Status.NOTHING=}')
+        await ctx.send(f'{Status.NOTHING == self.bot.game.status=}')
+        await ctx.send(f'{self.bot.game.status == Status.WAITING=}')
+        await ctx.send(f'{Status.NOTHING == Status.WAITING=}')
+        await ctx.send(f'{Status.NOTHING == Status.NOTHING=}')
+
         self.bot.game.status = Status.PLAYING
         await ctx.send('セッション開始しました')
 
