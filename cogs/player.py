@@ -15,7 +15,10 @@ class PlayerCog(commands.Cog):
         if self.bot.game.status == Status.PLAYING:
             await ctx.send('セッションが進行中です')
             return
-        # if 既に参加している場合（未実装）
+        if self.bot.game.status == Status.WAITING:
+            if ctx.author.id in self.bot.game.players:
+                await ctx.send('セッション参加済みです')
+                return
 
 
         await ctx.send(f'{ctx.author.mention}さんが参加しました')
