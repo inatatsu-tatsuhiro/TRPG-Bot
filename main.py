@@ -7,7 +7,8 @@ bot = commands.Bot(command_prefix='!')
 bot.game = Game()
 EXTENSIONS = [
     'cogs.cthulhucog',
-    'cogs.gamestatus'
+    'cogs.gamestatus',
+    'cogs.player'
 ]
 
 for extension in EXTENSIONS:

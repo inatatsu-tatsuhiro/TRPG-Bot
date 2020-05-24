@@ -56,6 +56,11 @@ class GameStatus(commands.Cog):
             return
         self.bot.game.status = Status.NOTHING
         await ctx.send('セッションを終了します')
+        for log in self.bot.game.lags:
+            await ctx.send(log)
+
+    # @commands.command()
+    # async def gamelog()
 
 
 

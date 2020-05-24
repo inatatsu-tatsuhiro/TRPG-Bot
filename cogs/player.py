@@ -10,18 +10,20 @@ class PlayerCog(commands.Cog):
     async def join(self, ctx):
         """セッションに参加する"""
         if self.bot.game.status == Status.NOTHING:
-            await ctx.send('セッションが立っていません')
-            return
+            return await ctx.send('セッションが立っていません')
+            
         if self.bot.game.status == Status.PLAYING:
-            await ctx.send('セッションが進行中です')
-            return
-        if self.bot.game.status == Status.WAITING:
-            if ctx.author.id in self.bot.game.players:
-                await ctx.send('セッション参加済みです')
-                return
-
-
-        await ctx.send(f'{ctx.author.mention}さんが参加しました')
+            return await ctx.send('セッションが進行中です')
+            
+        player = ctx.author
+        for p in self.bot.game.players:
+            if p.id == player.id:
+                return await ctx.send('セッション参加済みです')
+        mem = Player(player.id, False)
+        self.bot.game.players.append(player)
+        self.bot.game.logs.append(f'{player.mention}さんがセッションに参加しました')
+        # self.bot.game.players.get(player.id).logs.append("セッションに参加しました")
+        await ctx.send(f'{player.mention}さんが参加しました')
 
     @commands.command()
     async def leave(self, ctx):
@@ -33,6 +35,8 @@ class PlayerCog(commands.Cog):
         mem = ctx.author
         for p in self.bot.game.players:
             if mem.id == p.id:
+                self.bot.game.logs.append(f'{mem.mention}さんがセッションから退出しました')
+                # self.bot.game.players.get(mem.id).logs.append("セッションから退出しました")
                 return await ctx.send("セッションから退出しました")
 
 def setup(bot):
