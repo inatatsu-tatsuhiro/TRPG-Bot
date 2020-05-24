@@ -23,6 +23,17 @@ class PlayerCog(commands.Cog):
 
         await ctx.send(f'{ctx.author.mention}さんが参加しました')
 
-    # @commands.command()
-    # async def leave(self, ctx):
+    @commands.command()
+    async def leave(self, ctx):
         """セッションへの参加をやめる（脱退）"""
+        if self.bot.game.status == Status.NOTHING:
+            return await ctx.send("セッションが立っていません")
+        elif self.game.bot.status == Status.PLAYING:
+            return await ctx.send("セッションが既に開始されているため退出出来ません")
+        mem = ctx.author
+        for p in self.bot.game.players:
+            if mem.id == p.id:
+                return await ctx.send("セッションから退出しました")
+
+def setup(bot):
+    bot.add_cog(PlayerCog(bot))
