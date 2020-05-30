@@ -1,5 +1,6 @@
 from cogs.utils.player import Player, Players
 from cogs.status import Status
+from datetime import datetime, timezone, timedelta
 
 class Game():
     """TRPG_GAME
@@ -16,4 +17,10 @@ class Game():
         self.status = Status.NOTHING
         self.channel = None
         self.players = Players()
-        self.logs = ["セッションの準備を始めます"]
+        self.logs = []
+
+
+    def get_time(self):
+        JST = timezone(timedelta(hours=+9), 'JST')
+        t = str(datetime.now(JST)).split(".")[0]
+        return t
