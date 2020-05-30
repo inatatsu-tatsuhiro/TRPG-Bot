@@ -1,6 +1,5 @@
 from discord.ext import commands
 from cogs.status import Status
-import os
 
 
 class GameStatus(commands.Cog):
@@ -43,6 +42,9 @@ class GameStatus(commands.Cog):
 
         self.bot.game.status = Status.PLAYING
         await ctx.send('セッション開始しました')
+        vc = ctx.author.voice.channel
+        await vc.connect()
+
 
     
     @commands.command()
@@ -57,8 +59,10 @@ class GameStatus(commands.Cog):
             return
         self.bot.game.status = Status.NOTHING
         await ctx.send('セッションを終了します')
-        for log in self.bot.game.lags:
-            await ctx.send(log)
+        # for log in self.bot.game.logs:
+        #     await ctx.send(log)
+        client = ctx.guild.voice_client
+        await client.disconnect()
 
 
 def setup(bot):
