@@ -27,6 +27,7 @@ class GameStatus(commands.Cog):
         self.bot.game.channel = ctx.channel
         await ctx.send('セッションの準備を開始します')
 
+        self.bot.game.logs.append(f'{ctx.author.name}さんがセッションを立ち上げました ::  <{self.bot.game.get_time()}>')
 
 
 
@@ -41,7 +42,8 @@ class GameStatus(commands.Cog):
             return
 
         self.bot.game.status = Status.PLAYING
-        await ctx.send('セッション開始しました')
+        await ctx.send(f'セッション開始しました')
+        self.bot.game.logs(f'セッションが開始しました ::  <{self.bot.game.get_time()}>')
         # vc = ctx.author.voice.channel
         # await vc.connect()
 
@@ -59,6 +61,7 @@ class GameStatus(commands.Cog):
             return
         self.bot.game.status = Status.NOTHING
         await ctx.send('セッションを終了します')
+        self.bot.game.logs(f'セッションが終了しました ::  <{self.bot.game.get_time()}>')
         # client = ctx.guild.voice_client
         # await client.disconnect()
 
