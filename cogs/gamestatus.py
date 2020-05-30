@@ -59,8 +59,6 @@ class GameStatus(commands.Cog):
             return
         self.bot.game.status = Status.NOTHING
         await ctx.send('セッションを終了します')
-        # for log in self.bot.game.logs:
-        #     await ctx.send(log)
         client = ctx.guild.voice_client
         await client.disconnect()
 
