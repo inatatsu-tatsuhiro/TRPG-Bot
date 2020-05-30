@@ -60,15 +60,6 @@ class GameStatus(commands.Cog):
         for log in self.bot.game.lags:
             await ctx.send(log)
 
-    @commands.command()
-    async def gamelog(self, ctx):
-        await ctx.send("hi")
-        """ゲーム全体のログファイルを出力"""
-        with open('test.txt', 'w') as f:
-            f.write('hogehoge')
-            await ctx.send(f)
-        os.remove('test.txt')
-
 
 def setup(bot):
     bot.add_cog(GameStatus(bot))

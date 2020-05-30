@@ -39,5 +39,15 @@ class PlayerCog(commands.Cog):
                 # self.bot.game.players.get(mem.id).logs.append("セッションから退出しました")
                 return await ctx.send("セッションから退出しました")
 
+    @commands.command()
+    async def gamelog(self, ctx):
+        await ctx.send("hi")
+        """ゲーム全体のログファイルを出力"""
+        with open('test.txt', 'w') as f:
+            f.write('hogehoge')
+            await ctx.send(f)
+        os.remove('test.txt')
+
+
 def setup(bot):
     bot.add_cog(PlayerCog(bot))
