@@ -2,6 +2,9 @@ from discord.ext import commands
 from cogs.utils.player import Player
 from cogs.status import Status
 
+import discord
+import os
+
 class PlayerCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -19,7 +22,7 @@ class PlayerCog(commands.Cog):
         for p in self.bot.game.players:
             if p.id == player.id:
                 return await ctx.send('セッション参加済みです')
-        mem = Player(player.id, False)
+        mem = Player(player.id)
         self.bot.game.players.append(player)
         self.bot.game.logs.append(f'{player.mention}さんがセッションに参加しました')
         # self.bot.game.players.get(player.id).logs.append("セッションに参加しました")
@@ -45,7 +48,7 @@ class PlayerCog(commands.Cog):
         """ゲーム全体のログファイルを出力"""
         with open('test.txt', 'w') as f:
             f.write('hogehoge')
-            await ctx.send(f)
+        await ctx.send(file=discord.File('test.txt'))
         os.remove('test.txt')
 
 

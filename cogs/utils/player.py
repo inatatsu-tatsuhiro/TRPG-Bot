@@ -9,7 +9,7 @@ class Player():
         logs (string[]): Playerごとのログ
     """
 
-    def __init__(self, d_id: int, gm: bool):
+    def __init__(self, d_id: int, gm: bool = False):
         self.id = d_id
         self.is_GM = gm
         self.logs = ["セッションに参加しました"]
