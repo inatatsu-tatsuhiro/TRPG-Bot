@@ -16,4 +16,4 @@ class Game():
         self.status = Status.NOTHING
         self.channel = None
         self.players = Players()
-        self.logs = ["セッションの準備を始めます"]
+        self.logs = []
