@@ -12,7 +12,7 @@ class Player():
     def __init__(self, d_id: int, gm: bool = False):
         self.id = d_id
         self.is_GM = gm
-        self.logs = ["セッションに参加しました"]
+        self.logs = []
 
     
 
@@ -22,7 +22,7 @@ class Players(list):
     @property
     def players(self) -> Players:
         "PL一覧"
-        return Players(p for p in self if p.is_GM)
+        return Players(p for p in self if p.is_GM == False)
 
     def get(self, player_id) -> Player:
         for p in self:
