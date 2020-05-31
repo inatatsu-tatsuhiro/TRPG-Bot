@@ -3,6 +3,7 @@ from cogs.utils.player import Player
 from cogs.status import Status
 
 import discord
+import random
 import os
 
 class PlayerCog(commands.Cog):
@@ -51,6 +52,27 @@ class PlayerCog(commands.Cog):
         await ctx.send(file=discord.File('test.txt'))
         os.remove('test.txt')
 
+    @commands.command()
+    async def dice(self, ctx, d_count=3, d_max=6):
+        msg, num = diceroll(d_count,d_max)
+        await ctx.send(f'{ctx.author.name}さんの{d_count}D{d_max}\n{msg}')
+        
+
+
 
 def setup(bot):
     bot.add_cog(PlayerCog(bot))
+
+def diceroll(d_count, d_max):
+    result = ""
+    num = 0
+    for i in range(int(d_count)):
+        rand = _random(d_max)
+        msg = f'{i+1}回目：{rand}\n'
+        num += rand
+        result += msg
+    result += f'結果:{num}'
+    return result, num
+
+def _random(d_max):
+    return int(random.random() * int(d_max) + 1)
