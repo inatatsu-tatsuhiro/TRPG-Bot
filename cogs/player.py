@@ -24,9 +24,9 @@ class PlayerCog(commands.Cog):
             if p.id == player.id:
                 return await ctx.send('セッション参加済みです')
         mem = Player(player.id)
-        self.bot.game.players.append(player)
-        self.bot.game.logs.append(f'{player.mention}さんがセッションに参加しました')
-        # self.bot.game.players.get(player.id).logs.append("セッションに参加しました")
+        self.bot.game.players.append(mem)
+        self.bot.game.logs.append(f'{player.name}さんがセッションに参加しました :: <{self.bot.game.get_time()}>')
+        self.bot.game.players.get(player.id).logs.append(f'セッションに参加しました :: <{self.bot.game.get_time()}>')
         await ctx.send(f'{player.mention}さんが参加しました')
 
     @commands.command()
@@ -39,18 +39,63 @@ class PlayerCog(commands.Cog):
         mem = ctx.author
         for p in self.bot.game.players:
             if mem.id == p.id:
-                self.bot.game.logs.append(f'{mem.mention}さんがセッションから退出しました')
-                # self.bot.game.players.get(mem.id).logs.append("セッションから退出しました")
+                self.bot.game.logs.append(f'{mem.name}さんがセッションから退出しました :: <{self.bot.game.get_time()}>')
+                self.bot.game.players.get(mem.id).logs.append(f'セッションから退出しました :: <{self.bot.game.get_time()}>')
                 return await ctx.send("セッションから退出しました")
 
     @commands.command()
     async def gamelog(self, ctx):
-        await ctx.send("hi")
         """ゲーム全体のログファイルを出力"""
-        with open('test.txt', 'w') as f:
-            f.write('hogehoge')
-        await ctx.send(file=discord.File('test.txt'))
-        os.remove('test.txt')
+        with open('gamelog.txt', 'w') as f:
+
+            for log in self.bot.game.logs:
+                f.write(log + "\n")
+
+        await ctx.send(file=discord.File('gamelog.txt'))
+        os.remove('gamelog.txt')
+        
+        await ctx.send("ゲームログを出力しました")
+
+
+    @commands.command()
+    async def mylog(self, ctx):
+        """自分のログファイルを出力"""
+        p = self.bot.game.players.get(ctx.author.id)
+        filename = f'{ctx.author.name}log.txt'
+        with open(filename,'w') as f:
+            for log in p.logs:
+                f.write(log + '\n')
+        os.remove(filename)
+        await ctx.send(f'{ctx.author.name}さんのログを出力しました')
+
+    @commands.command()
+    async def dice(self, ctx, d_count=3, d_max=6):
+        msg, num = diceroll(d_count,d_max)
+        await ctx.send(f'{ctx.author.name}さんの{d_count}D{d_max}\n{msg}')
+        self.bot.game.logs.append(f'{ctx.author.name}さんの{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
+        self.bot.game.players.get(mem.id).logs.append(f'{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
+
+    @coc.command(aliases=['dd'])
+    async def d100(self, ctx, limit=-1):
+        r = _random(100)
+        msg = ""
+        if limit == -1:
+            msg = f'1D100の結果は{r}です'　
+        else:
+            if r <= limit and r <= 5:
+                msg = f'1D100の結果は{r}でクリティカル'
+            elif r <= limit:
+                msg = f'1D100の結果は{r}で成功'
+            elif limit < r and 96 <= r:
+                msg = f'1D100の結果は{r}でファンブル'
+            else :
+                msg = f'1D100の結果は{r}で失敗'
+        await ctx.send(f'{ctx.author.name}さんの{msg}')
+        self.bot.game.logs.append(f'{ctx.author.name}さんの{msg}')
+        self.bot.game.players.get(mem.id).logs.append(msg)
+
+        
+            
 
     @commands.command()
     async def dice(self, ctx, d_count=3, d_max=6):
@@ -63,6 +108,10 @@ class PlayerCog(commands.Cog):
 def setup(bot):
     bot.add_cog(PlayerCog(bot))
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9c14273f8908cd16a368d4b45ab24257a9cb2b82
 def diceroll(d_count, d_max):
     result = ""
     num = 0
@@ -75,4 +124,8 @@ def diceroll(d_count, d_max):
     return result, num
 
 def _random(d_max):
+<<<<<<< HEAD
     return int(random.random() * int(d_max) + 1)
+=======
+    return int(random.random() * int(d_max) + 1)
+>>>>>>> 9c14273f8908cd16a368d4b45ab24257a9cb2b82
