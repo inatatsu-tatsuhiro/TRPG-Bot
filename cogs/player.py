@@ -108,10 +108,6 @@ class PlayerCog(commands.Cog):
 def setup(bot):
     bot.add_cog(PlayerCog(bot))
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 9c14273f8908cd16a368d4b45ab24257a9cb2b82
 def diceroll(d_count, d_max):
     result = ""
     num = 0
@@ -124,8 +120,4 @@ def diceroll(d_count, d_max):
     return result, num
 
 def _random(d_max):
-<<<<<<< HEAD
     return int(random.random() * int(d_max) + 1)
-=======
-    return int(random.random() * int(d_max) + 1)
->>>>>>> 9c14273f8908cd16a368d4b45ab24257a9cb2b82
