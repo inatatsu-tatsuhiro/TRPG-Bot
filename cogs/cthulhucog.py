@@ -23,9 +23,9 @@ class CthulhuCog(commands.Cog):
     # 自分(特定のユーザー)にこれでDM送れる
     @coc.command()
     async def test(self, ctx):
-        user_id = 459739962619985921
+        user_id = ctx.message.author.id
         user = self.bot.get_user(user_id)
-        await user.send('test')
+        await user.send('おなかがすきましたね')
     
     @coc.command(aliases=['dd'])
     async def d100(self, ctx, limit=-1):
