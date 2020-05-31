@@ -3,6 +3,7 @@ from cogs.utils.player import Player
 from cogs.status import Status
 
 import discord
+import random
 import os
 
 class PlayerCog(commands.Cog):
@@ -67,6 +68,50 @@ class PlayerCog(commands.Cog):
         os.remove(filename)
         await ctx.send(f'{ctx.author.name}さんのログを出力しました')
 
+    @commands.command()
+    async def dice(self, ctx, d_count=3, d_max=6):
+        msg, num = diceroll(d_count,d_max)
+        await ctx.send(f'{ctx.author.name}さんの{d_count}D{d_max}\n{msg}')
+        self.bot.game.logs.append(f'{ctx.author.name}さんの{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
+        self.bot.game.players.get(mem.id).logs.append(f'{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
+
+    @coc.command(aliases=['dd'])
+    async def d100(self, ctx, limit=-1):
+        r = _random(100)
+        msg = ""
+        if limit == -1:
+            msg = f'1D100の結果は{r}です'　
+        else:
+            if r <= limit and r <= 5:
+                msg = f'1D100の結果は{r}でクリティカル'
+            elif r <= limit:
+                msg = f'1D100の結果は{r}で成功'
+            elif limit < r and 96 <= r:
+                msg = f'1D100の結果は{r}でファンブル'
+            else :
+                msg = f'1D100の結果は{r}で失敗'
+        await ctx.send(f'{ctx.author.name}さんの{msg}')
+        self.bot.game.logs.append(f'{ctx.author.name}さんの{msg}')
+        self.bot.game.players.get(mem.id).logs.append(msg)
+
+        
+            
+
 
 def setup(bot):
     bot.add_cog(PlayerCog(bot))
+
+
+def diceroll(d_count, d_max):
+    result = ""
+    num = 0
+    for i in range(int(d_count)):
+        rand = _random(d_max)
+        msg = f'{i+1}回目：{rand}\n'
+        num += rand
+        result += msg
+    result += f'結果:{num}'
+    return result, num
+
+def _random(d_max):
+    return int(random.random() * int(d_max) + 1)
