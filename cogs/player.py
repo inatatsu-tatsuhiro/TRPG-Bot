@@ -23,9 +23,9 @@ class PlayerCog(commands.Cog):
             if p.id == player.id:
                 return await ctx.send('セッション参加済みです')
         mem = Player(player.id)
-        self.bot.game.players.append(player)
+        self.bot.game.players.append(mem)
         self.bot.game.logs.append(f'{player.name}さんがセッションに参加しました :: <{self.bot.game.get_time()}>')
-        # self.bot.game.players.get(player.id).logs.append("セッションに参加しました")
+        self.bot.game.players.get(player.id).logs.append(f'セッションに参加しました :: <{self.bot.game.get_time()}>')
         await ctx.send(f'{player.mention}さんが参加しました')
 
     @commands.command()
@@ -39,7 +39,7 @@ class PlayerCog(commands.Cog):
         for p in self.bot.game.players:
             if mem.id == p.id:
                 self.bot.game.logs.append(f'{mem.name}さんがセッションから退出しました :: <{self.bot.game.get_time()}>')
-                # self.bot.game.players.get(mem.id).logs.append("セッションから退出しました")
+                self.bot.game.players.get(mem.id).logs.append(f'セッションから退出しました :: <{self.bot.game.get_time()}>')
                 return await ctx.send("セッションから退出しました")
 
     @commands.command()
@@ -54,6 +54,18 @@ class PlayerCog(commands.Cog):
         os.remove('gamelog.txt')
         
         await ctx.send("ゲームログを出力しました")
+
+
+    @commands.command()
+    async def mylog(self, ctx):
+        """自分のログファイルを出力"""
+        p = self.bot.game.players.get(ctx.author.id)
+        filename = f'{ctx.author.name}log.txt'
+        with open(filename,'w') as f:
+            for log in p.logs:
+                f.write(log + '\n')
+        os.remove(filename)
+        await ctx.send(f'{ctx.author.name}さんのログを出力しました')
 
 
 def setup(bot):
