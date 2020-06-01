@@ -23,7 +23,7 @@ class PlayerCog(commands.Cog):
         for p in self.bot.game.players:
             if p.id == player.id:
                 return await ctx.send('セッション参加済みです')
-        mem = Player(player.id)
+        mem = Player(player.id, player.name)
         self.bot.game.players.append(mem)
         self.bot.game.logs.append(f'{player.name}さんがセッションに参加しました :: <{self.bot.game.get_time()}>')
         self.bot.game.players.get(player.id).logs.append(f'セッションに参加しました :: <{self.bot.game.get_time()}>')
@@ -73,6 +73,7 @@ class PlayerCog(commands.Cog):
         with open(filename,'w') as f:
             for log in p.logs:
                 f.write(log + '\n')
+        await ctx.send(file=discord.File(filename))
         os.remove(filename)
         await ctx.send(f'{ctx.author.name}さんのログを出力しました')
 
