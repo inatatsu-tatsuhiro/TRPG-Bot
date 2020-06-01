@@ -46,6 +46,10 @@ class PlayerCog(commands.Cog):
     @commands.command()
     async def gamelog(self, ctx):
         """ゲーム全体のログファイルを出力"""
+        if self.bot.game.status == Status.NOTHING:
+            return await ctx.send("セッションが立っていません")
+        elif self.game.bot.status == Status.WAITING:
+            return await ctx.send("セッションが開始されていません")
         with open('gamelog.txt', 'w') as f:
 
             for log in self.bot.game.logs:
@@ -60,6 +64,10 @@ class PlayerCog(commands.Cog):
     @commands.command()
     async def mylog(self, ctx):
         """自分のログファイルを出力"""
+        if self.bot.game.status == Status.NOTHING:
+            return await ctx.send("セッションが立っていません")
+        elif self.game.bot.status == Status.WAITING:
+            return await ctx.send("セッションが開始されていません")
         p = self.bot.game.players.get(ctx.author.id)
         filename = f'{ctx.author.name}log.txt'
         with open(filename,'w') as f:
@@ -71,23 +79,18 @@ class PlayerCog(commands.Cog):
     @commands.command()
     async def dice(self, ctx, d_count=3, d_max=6):
 
-        if ctx.message.guild.voice_client is not None:
+        msg, num = diceroll(d_count,d_max)
+        await ctx.send(f'{ctx.author.name}さんの{d_count}D{d_max}\n{msg}')
+
+        if self.bot.game.status == Status.PLAYING:
             voice_client = ctx.message.guild.voice_client
             ffmpeg_audio_source = discord.FFmpegPCMAudio("dice.mp3")
             voice_client.play(ffmpeg_audio_source)
-            
-        msg, num = diceroll(d_count,d_max)
-        await ctx.send(f'{ctx.author.name}さんの{d_count}D{d_max}\n{msg}')
-        self.bot.game.logs.append(f'{ctx.author.name}さんの{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
-        self.bot.game.players.get(mem.id).logs.append(f'{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
+            self.bot.game.logs.append(f'{ctx.author.name}さんの{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
+            self.bot.game.players.get(ctx.author.id).logs.append(f'{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
 
     @commands.command(aliases=['dd'])
     async def d100(self, ctx, limit=-1):
-
-        if ctx.message.guild.voice_client is not None:
-            voice_client = ctx.message.guild.voice_client
-            ffmpeg_audio_source = discord.FFmpegPCMAudio("dice.mp3")
-            voice_client.play(ffmpeg_audio_source)
 
         r = _random(100)
         msg = ""
@@ -103,8 +106,13 @@ class PlayerCog(commands.Cog):
             else :
                 msg = f'1D100の結果は{r}で失敗'
         await ctx.send(f'{ctx.author.name}さんの{msg}')
-        self.bot.game.logs.append(f'{ctx.author.name}さんの{msg}')
-        self.bot.game.players.get(mem.id).logs.append(msg)
+
+        if self.bot.game.status == Status.PLAYING:
+            voice_client = ctx.message.guild.voice_client
+            ffmpeg_audio_source = discord.FFmpegPCMAudio("dice.mp3")
+            voice_client.play(ffmpeg_audio_source)    
+            self.bot.game.logs.append(f'{ctx.author.name}さんの{msg}')
+            self.bot.game.players.get(ctx.author.id).logs.append(msg)
 
 
 def setup(bot):
