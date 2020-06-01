@@ -1,6 +1,8 @@
 from discord.ext import commands
 from cogs.status import Status
 
+import discord
+import os
 
 class GameStatus(commands.Cog):
     def __init__(self, bot):
@@ -44,8 +46,9 @@ class GameStatus(commands.Cog):
         self.bot.game.status = Status.PLAYING
 
         await ctx.send('セッション開始しました')
-        vc = ctx.author.voice.channel
-        await vc.connect()
+        if ctx.author.voice is not None:
+            vc = ctx.author.voice.channel
+            await vc.connect()
 
 
     
@@ -62,9 +65,26 @@ class GameStatus(commands.Cog):
         self.bot.game.status = Status.NOTHING
         await ctx.send('セッションを終了します')
 
-        client = ctx.guild.voice_client
-        await client.disconnect()
+        for p in self.bot.game.players:
+            filename = f'{p.name}log.txt'
+            with open(filename,'w') as f:
+                for log in p.logs:
+                    f.write(log + '\n')
+            await ctx.send(file=discord.File(filename))
+            os.remove(filename)
+            await ctx.send(f'{p.name}さんのログを出力しました')
+        with open('gamelog.txt', 'w') as f:
 
+            for log in self.bot.game.logs:
+                f.write(log + "\n")
 
+        await ctx.send(file=discord.File('gamelog.txt'))
+        os.remove('gamelog.txt')
+
+        if ctx.guild.voice_client is not None:
+            client = ctx.guild.voice_client
+            await client.disconnect()
+        
+    
 def setup(bot):
     bot.add_cog(GameStatus(bot))
