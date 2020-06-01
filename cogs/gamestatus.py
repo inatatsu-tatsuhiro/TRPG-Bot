@@ -46,7 +46,6 @@ class GameStatus(commands.Cog):
         await ctx.send('セッション開始しました')
         vc = ctx.author.voice.channel
         await vc.connect()
->>>>>>> bot-entry-vc
 
 
     
@@ -65,7 +64,6 @@ class GameStatus(commands.Cog):
 
         client = ctx.guild.voice_client
         await client.disconnect()
->>>>>>> bot-entry-vc
 
 
 def setup(bot):
