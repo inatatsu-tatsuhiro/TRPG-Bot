@@ -70,17 +70,29 @@ class PlayerCog(commands.Cog):
 
     @commands.command()
     async def dice(self, ctx, d_count=3, d_max=6):
+
+        if ctx.message.guild.voice_client is not None:
+            voice_client = ctx.message.guild.voice_client
+            ffmpeg_audio_source = discord.FFmpegPCMAudio("dice.mp3")
+            voice_client.play(ffmpeg_audio_source)
+            
         msg, num = diceroll(d_count,d_max)
         await ctx.send(f'{ctx.author.name}さんの{d_count}D{d_max}\n{msg}')
         self.bot.game.logs.append(f'{ctx.author.name}さんの{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
         self.bot.game.players.get(mem.id).logs.append(f'{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
 
-    @coc.command(aliases=['dd'])
+    @commands.command(aliases=['dd'])
     async def d100(self, ctx, limit=-1):
+
+        if ctx.message.guild.voice_client is not None:
+            voice_client = ctx.message.guild.voice_client
+            ffmpeg_audio_source = discord.FFmpegPCMAudio("dice.mp3")
+            voice_client.play(ffmpeg_audio_source)
+
         r = _random(100)
         msg = ""
         if limit == -1:
-            msg = f'1D100の結果は{r}です'　
+            msg = f'1D100の結果は{r}です'
         else:
             if r <= limit and r <= 5:
                 msg = f'1D100の結果は{r}でクリティカル'
@@ -93,9 +105,6 @@ class PlayerCog(commands.Cog):
         await ctx.send(f'{ctx.author.name}さんの{msg}')
         self.bot.game.logs.append(f'{ctx.author.name}さんの{msg}')
         self.bot.game.players.get(mem.id).logs.append(msg)
-
-        
-            
 
 
 def setup(bot):
