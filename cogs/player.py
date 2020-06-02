@@ -77,7 +77,7 @@ class PlayerCog(commands.Cog):
         os.remove(filename)
         await ctx.send(f'{ctx.author.name}さんのログを出力しました')
 
-    @commands.command()
+    @commands.command(aliases=['d'])
     async def dice(self, ctx, d_count=3, d_max=6):
 
         msg, num = diceroll(d_count,d_max)
@@ -113,7 +113,16 @@ class PlayerCog(commands.Cog):
             ffmpeg_audio_source = discord.FFmpegPCMAudio("dice.mp3")
             voice_client.play(ffmpeg_audio_source)    
             self.bot.game.logs.append(f'{ctx.author.name}さんの{msg}')
-            self.bot.game.players.get(ctx.author.id).logs.append(msg)
+            self.bot.game.players.get(ctx.author.id).logs.append(f'{msg}')
+    
+    @commands.command(aliases=['sd'])
+    async def secret(self, ctx):
+        r = _random(100)
+        msg = f'シークレットダイスの結果は{r}です'
+        user_id = ctx.message.author.id
+        user = self.bot.get_user(user_id)
+        await user.send(msg)
+        self.bot.game.players.get(ctx.author.id).logs.append(f'{msg}')
 
 
 def setup(bot):
