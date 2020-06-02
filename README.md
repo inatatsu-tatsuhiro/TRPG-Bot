@@ -2,6 +2,13 @@
 
 Discord上でTRPG(CoC)をプレイする際の補助Bot
 
+# DEMO
+準備中(bot アイコン作成中)
+
+# Features
+オンラインセッションで必須なダイス機能や、セッションのログをDiscord単体で管理することができます。  
+ダイス音がVoiceChatに流れるため、雰囲気もGoodです。
+
 # Requirements
 - discord 1.0.1
 - discord.py 1.3.3 (voice)
@@ -9,13 +16,15 @@ Discord上でTRPG(CoC)をプレイする際の補助Bot
 - opus
 
 # Installation
+requirements.txt
 ```requirements.txt
 discord==1.0.1
 discord.py[voice]==1.3.3
 ```
 
+bash
 ```bash
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 # Commands
@@ -35,6 +44,7 @@ pip install -r requirements.txt
 `!start`
 
 参加者が揃いセッションの準備が完了するとこのコマンドを用いてセッションを開始する
+BotがVoice Chatに参加する
 
 ## セッションを終了する
 `!close`
@@ -52,6 +62,8 @@ pip install -r requirements.txt
 コマンド使用者の現在時点でのログファイルを書き出す
 
 ## サイコロを振る
+乱数によりサイコロを振り、結果を表示する。
+Voice Chatにて効果音(サイコロ)を鳴らす。
 
 ### カスタムダイスを振る
 `!dice` `!d`
@@ -91,5 +103,10 @@ pip install -r requirements.txt
 
 # Author
 - いなたつ
-- [Twitter](https://twitter.com/_inatatsu_csg_)
-- [Qiita](https://qiita.com/inatatsu_csg)
+- [Twitter @_inatatsu_csg](https://twitter.com/_inatatsu_csg_)
+- [Qiita inatatsu_csg](https://qiita.com/inatatsu_csg)
+
+# Sound
+サイコロの音源にて使用させていただきました。
+
+■サイト名：On-Jin ～音人～　■サイトアドレス：https://on-jin.com/
