@@ -1,6 +1,6 @@
 from discord.ext import commands
 from cogs.status import Status
-
+from cogs.utils.game import Game
 import discord
 import os
 
@@ -84,6 +84,7 @@ class GameStatus(commands.Cog):
         if ctx.guild.voice_client is not None:
             client = ctx.guild.voice_client
             await client.disconnect()
+        self.bot.game = Game()
         
     
 def setup(bot):
