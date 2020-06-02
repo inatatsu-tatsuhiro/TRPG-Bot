@@ -90,3 +90,6 @@ pip install -r requirements.txt
 1d100の結果をコマンド使用者のDMに送信する
 
 # Author
+- いなたつ
+- [Twitter](https://twitter.com/_inatatsu_csg_)
+- [Qiita](https://qiita.com/inatatsu_csg)
