@@ -29,3 +29,9 @@ class Players(list):
         for p in self:
             if p.id == player_id:
                 return p
+
+    def is_joined(self, player_id) -> bool:
+        for p in self:
+            if p.id == player_id:
+                return True
+        return False
