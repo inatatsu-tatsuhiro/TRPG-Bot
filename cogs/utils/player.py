@@ -9,8 +9,9 @@ class Player():
         logs (string[]): Playerごとのログ
     """
 
-    def __init__(self, d_id: int, gm: bool = False):
+    def __init__(self, d_id: int, d_name: string, gm: bool = False):
         self.id = d_id
+        self.name = d_name
         self.is_GM = gm
         self.logs = []
 
