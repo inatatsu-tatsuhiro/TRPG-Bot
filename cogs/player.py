@@ -87,6 +87,7 @@ class PlayerCog(commands.Cog):
             voice_client = ctx.message.guild.voice_client
             ffmpeg_audio_source = discord.FFmpegPCMAudio("dice.mp3")
             voice_client.play(ffmpeg_audio_source)
+        if self.bot.game.players.is_joined(ctx.author.id):
             self.bot.game.logs.append(f'{ctx.author.name}さんの{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
             self.bot.game.players.get(ctx.author.id).logs.append(f'{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
 
@@ -111,7 +112,8 @@ class PlayerCog(commands.Cog):
         if self.bot.game.status == Status.PLAYING:
             voice_client = ctx.message.guild.voice_client
             ffmpeg_audio_source = discord.FFmpegPCMAudio("dice.mp3")
-            voice_client.play(ffmpeg_audio_source)    
+            voice_client.play(ffmpeg_audio_source)
+        if self.bot.game.players.is_joined(ctx.author.id):
             self.bot.game.logs.append(f'{ctx.author.name}さんの{msg}')
             self.bot.game.players.get(ctx.author.id).logs.append(f'{msg}')
     
@@ -122,7 +124,8 @@ class PlayerCog(commands.Cog):
         user_id = ctx.message.author.id
         user = self.bot.get_user(user_id)
         await user.send(msg)
-        self.bot.game.players.get(ctx.author.id).logs.append(f'{msg}')
+        if self.bot.game.players.is_joined(ctx.author.id):
+            self.bot.game.players.get(ctx.author.id).logs.append(f'{msg}')
 
     @commands.command()
     async def dice(self, ctx, d_count=3, d_max=6):

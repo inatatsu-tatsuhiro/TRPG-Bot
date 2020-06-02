@@ -66,7 +66,7 @@ class GameStatus(commands.Cog):
         await ctx.send('セッションを終了します')
 
         for p in self.bot.game.players:
-            filename = f'{p.name}log.txt'
+            filename = f'{p.id}log.txt'
             with open(filename,'w') as f:
                 for log in p.logs:
                     f.write(log + '\n')
@@ -85,7 +85,7 @@ class GameStatus(commands.Cog):
             client = ctx.guild.voice_client
             await client.disconnect()
         self.bot.game = Game()
-        
-    
+
+
 def setup(bot):
     bot.add_cog(GameStatus(bot))
