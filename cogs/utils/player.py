@@ -23,6 +23,10 @@ class Players(list):
     @property
     def players(self) -> Players:
         "PL一覧"
+        return Players(p for p in self)
+    @property
+    def playercharactors(self) -> Players:
+        "PL一覧"
         return Players(p for p in self if p.is_GM == False)
 
     def get(self, player_id) -> Player:
