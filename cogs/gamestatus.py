@@ -1,6 +1,7 @@
 from discord.ext import commands
 from cogs.status import Status
 from cogs.utils.game import Game
+from cogs.utils.player import Player
 import discord
 import os
 
@@ -28,7 +29,8 @@ class GameStatus(commands.Cog):
         self.bot.game.status = Status.WAITING
         self.bot.game.channel = ctx.channel
         await ctx.send('セッションの準備を開始します')
-
+        mem = Player(ctx.author.id, ctx.author.name, True)
+        self.bot.game.players.append(mem)
         self.bot.game.logs.append(f'{ctx.author.name}さんがセッションを立ち上げました ::  <{self.bot.game.get_time()}>')
 
 
