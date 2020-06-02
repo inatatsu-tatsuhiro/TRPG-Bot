@@ -1,31 +1,17 @@
 from discord.ext import commands # Bot Commands Frameworkをインポート
 import os
 import traceback # エラー表示のためにインポート
+from cogs.utils.game import Game
 
-
-INITIAL_EXTENSIONS = [
-    'cogs.cthulhucog'
+bot = commands.Bot(command_prefix='!')
+bot.game = Game()
+EXTENSIONS = [
+    'cogs.cthulhucog',
+    'cogs.gamestatus',
+    'cogs.player'
 ]
 
-class MyBot(commands.Bot):
+for extension in EXTENSIONS:
+    bot.load_extension(extension)
 
-
-    def __init__(self, command_prefix):
-        super().__init__(command_prefix)
-
-        for cog in INITIAL_EXTENSIONS:
-            try:
-                self.load_extension(cog)
-            except Exception:
-                traceback.print_exc()
-
-    async def on_ready(self):
-        print('-----')
-        print(self.user.name)
-        print(self.user.id)
-        print('-----')
-
-
-if __name__ == '__main__':
-    bot = MyBot(command_prefix='!')
-    bot.run(os.environ["TOKEN"]) # botトークンを環境変 TOKEN を使う
+bot.run(os.environ["TOKEN"])
