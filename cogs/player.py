@@ -114,8 +114,8 @@ class PlayerCog(commands.Cog):
             ffmpeg_audio_source = discord.FFmpegPCMAudio("dice.mp3")
             voice_client.play(ffmpeg_audio_source)
         if self.bot.game.players.is_joined(ctx.author.id):
-            self.bot.game.logs.append(f'{ctx.author.name}さんの{msg}')
-            self.bot.game.players.get(ctx.author.id).logs.append(f'{msg}')
+            self.bot.game.logs.append(f'{ctx.author.name}さんの{msg} :: <{self.bot.game.get_time()}>')
+            self.bot.game.players.get(ctx.author.id).logs.append(f'{msg} :: <{self.bot.game.get_time()}>')
     
     @commands.command(aliases=['sd'])
     async def secret(self, ctx):
@@ -125,7 +125,7 @@ class PlayerCog(commands.Cog):
         user = self.bot.get_user(user_id)
         await user.send(msg)
         if self.bot.game.players.is_joined(ctx.author.id):
-            self.bot.game.players.get(ctx.author.id).logs.append(f'{msg}')
+            self.bot.game.players.get(ctx.author.id).logs.append(f'{msg} :: <{self.bot.game.get_time()}>')
 
 
 def setup(bot):
