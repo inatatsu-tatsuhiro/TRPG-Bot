@@ -43,8 +43,8 @@ class PlayerCog(commands.Cog):
                 self.bot.game.players.get(mem.id).logs.append(f'セッションから退出しました :: <{self.bot.game.get_time()}>')
                 return await ctx.send("セッションから退出しました")
 
-    @commands.command()
-    async def gamelog(self, ctx):
+    @commands.command(aliases=['sl'])
+    async def sessionlog(self, ctx):
         """ゲーム全体のログファイルを出力"""
         if self.bot.game.status == Status.NOTHING:
             return await ctx.send("セッションが立っていません")
@@ -61,7 +61,7 @@ class PlayerCog(commands.Cog):
         await ctx.send("ゲームログを出力しました")
 
 
-    @commands.command()
+    @commands.command(aliases=['ml'])
     async def mylog(self, ctx):
         """自分のログファイルを出力"""
         if self.bot.game.status == Status.NOTHING:
@@ -127,10 +127,12 @@ class PlayerCog(commands.Cog):
         if self.bot.game.players.is_joined(ctx.author.id):
             self.bot.game.players.get(ctx.author.id).logs.append(f'{msg} :: <{self.bot.game.get_time()}>')
 
+        
+
+
 
 def setup(bot):
     bot.add_cog(PlayerCog(bot))
-
 
 def diceroll(d_count, d_max):
     result = ""

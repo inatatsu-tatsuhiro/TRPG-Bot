@@ -6,7 +6,6 @@ from cogs.utils.game import Game
 bot = commands.Bot(command_prefix='!')
 bot.game = Game()
 EXTENSIONS = [
-    'cogs.cthulhucog',
     'cogs.gamestatus',
     'cogs.player'
 ]
@@ -14,4 +13,4 @@ EXTENSIONS = [
 for extension in EXTENSIONS:
     bot.load_extension(extension)
 
-bot.run(os.environ["TOKEN"])
+bot.run(os.environ["TESTTOKEN"])
