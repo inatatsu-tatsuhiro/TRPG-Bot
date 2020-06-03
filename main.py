@@ -13,4 +13,4 @@ EXTENSIONS = [
 for extension in EXTENSIONS:
     bot.load_extension(extension)
 
-bot.run(os.environ["TOKEN"])
+bot.run(os.environ["TESTTOKEN"])
