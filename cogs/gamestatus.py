@@ -63,6 +63,7 @@ class GameStatus(commands.Cog):
         if self.bot.game.status == Status.WAITING:
             self.bot.game.status = Status.NOTHING
             await ctx.send('セッションをキャンセルします')
+            self.bot.game = Game()
             return
         self.bot.game.status = Status.NOTHING
         await ctx.send('セッションを終了します')
