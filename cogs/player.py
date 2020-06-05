@@ -34,7 +34,7 @@ class PlayerCog(commands.Cog):
         """セッションへの参加をやめる（脱退）"""
         if self.bot.game.status == Status.NOTHING:
             return await ctx.send("セッションが立っていません")
-        elif self.game.bot.status == Status.PLAYING:
+        elif self.bot.game.status == Status.PLAYING:
             return await ctx.send("セッションが既に開始されているため退出出来ません")
         mem = ctx.author
         for p in self.bot.game.players:
@@ -42,7 +42,7 @@ class PlayerCog(commands.Cog):
                 self.bot.game.logs.append(f'{mem.name}さんがセッションから退出しました :: <{self.bot.game.get_time()}>')
                 self.bot.game.players.get(mem.id).logs.append(f'セッションから退出しました :: <{self.bot.game.get_time()}>')
                 return await ctx.send("セッションから退出しました")
-
+                
     @commands.command(aliases=['sl'])
     async def sessionlog(self, ctx):
         """ゲーム全体のログファイルを出力"""
