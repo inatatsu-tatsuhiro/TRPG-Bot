@@ -39,10 +39,10 @@ class PlayerCog(commands.Cog):
         mem = ctx.author
         for p in self.bot.game.players:
             if mem.id == p.id:
+                self.bot.game.players.remove(mem.id)
                 self.bot.game.logs.append(f'{mem.name}さんがセッションから退出しました :: <{self.bot.game.get_time()}>')
-                self.bot.game.players.get(mem.id).logs.append(f'セッションから退出しました :: <{self.bot.game.get_time()}>')
-                return await ctx.send("セッションから退出しました")
-                
+                return await ctx.send(f'{p.name}さんがセッションから退出しました')
+
     @commands.command(aliases=['sl'])
     async def sessionlog(self, ctx):
         """ゲーム全体のログファイルを出力"""
