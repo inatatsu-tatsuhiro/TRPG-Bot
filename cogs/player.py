@@ -1,5 +1,6 @@
 from discord.ext import commands
 from cogs.utils.player import Player
+from cogs.utils.game import Game
 from cogs.status import Status
 
 import discord
@@ -13,46 +14,58 @@ class PlayerCog(commands.Cog):
     @commands.command()
     async def join(self, ctx):
         """セッションに参加する"""
-        if self.bot.game.status == Status.NOTHING:
+
+        if f'{ctx.guild.id}' not in self.bot.games:
+            self.bot.games[f'{ctx.guild.id}'] = Game()
+
+        if self.bot.games[f'{ctx.guild.id}'].status == Status.NOTHING:
             return await ctx.send('セッションが立っていません')
             
-        if self.bot.game.status == Status.PLAYING:
+        if self.bot.games[f'{ctx.guild.id}'].status == Status.PLAYING:
             return await ctx.send('セッションが進行中です')
             
         player = ctx.author
-        for p in self.bot.game.players:
+        for p in self.bot.games[f'{ctx.guild.id}'].players:
             if p.id == player.id:
                 return await ctx.send('セッション参加済みです')
         mem = Player(player.id, player.name)
-        self.bot.game.players.append(mem)
-        self.bot.game.logs.append(f'{player.name}さんがセッションに参加しました :: <{self.bot.game.get_time()}>')
-        self.bot.game.players.get(player.id).logs.append(f'セッションに参加しました :: <{self.bot.game.get_time()}>')
+        self.bot.games[f'{ctx.guild.id}'].players.append(mem)
+        self.bot.games[f'{ctx.guild.id}'].logs.append(f'{player.name}さんがセッションに参加しました :: <{Game.get_time()}>')
+        self.bot.games[f'{ctx.guild.id}'].players.get(player.id).logs.append(f'セッションに参加しました :: <{Game.get_time()}>')
         await ctx.send(f'{player.mention}さんが参加しました')
 
     @commands.command()
     async def leave(self, ctx):
         """セッションへの参加をやめる（脱退）"""
-        if self.bot.game.status == Status.NOTHING:
+
+        if f'{ctx.guild.id}' not in self.bot.games:
+            self.bot.games[f'{ctx.guild.id}'] = Game()
+
+        if self.bot.games[f'{ctx.guild.id}'].status == Status.NOTHING:
             return await ctx.send("セッションが立っていません")
-        elif self.bot.game.status == Status.PLAYING:
+        elif self.bot.games[f'{ctx.guild.id}'].status == Status.PLAYING:
             return await ctx.send("セッションが既に開始されているため退出出来ません")
         mem = ctx.author
-        for p in self.bot.game.players:
+        for p in self.bot.games[f'{ctx.guild.id}'].players:
             if mem.id == p.id:
-                self.bot.game.players.remove(mem.id)
-                self.bot.game.logs.append(f'{mem.name}さんがセッションから退出しました :: <{self.bot.game.get_time()}>')
+                self.bot.games[f'{ctx.guild.id}'].players.remove(mem.id)
+                self.bot.games[f'{ctx.guild.id}'].logs.append(f'{mem.name}さんがセッションから退出しました :: <{Game.get_time()}>')
                 return await ctx.send(f'{p.name}さんがセッションから退出しました')
 
     @commands.command(aliases=['sl'])
     async def sessionlog(self, ctx):
         """ゲーム全体のログファイルを出力"""
-        if self.bot.game.status == Status.NOTHING:
+
+        if f'{ctx.guild.id}' not in self.bot.games:
+            self.bot.games[f'{ctx.guild.id}'] = Game()
+
+        if self.bot.games[f'{ctx.guild.id}'].status == Status.NOTHING:
             return await ctx.send("セッションが立っていません")
-        elif self.game.bot.status == Status.WAITING:
+        elif self.games[f'{ctx.guild.id}'].bot.status == Status.WAITING:
             return await ctx.send("セッションが開始されていません")
         with open('gamelog.txt', 'w') as f:
 
-            for log in self.bot.game.logs:
+            for log in self.bot.games[f'{ctx.guild.id}'].logs:
                 f.write(log + "\n")
 
         await ctx.send(file=discord.File('gamelog.txt'))
@@ -64,11 +77,15 @@ class PlayerCog(commands.Cog):
     @commands.command(aliases=['ml'])
     async def mylog(self, ctx):
         """自分のログファイルを出力"""
-        if self.bot.game.status == Status.NOTHING:
+
+        if f'{ctx.guild.id}' not in self.bot.games:
+            self.bot.games[f'{ctx.guild.id}'] = Game()
+
+        if self.bot.games[f'{ctx.guild.id}'].status == Status.NOTHING:
             return await ctx.send("セッションが立っていません")
-        elif self.game.bot.status == Status.WAITING:
+        elif self.bot.games[f'{ctx.guild.id}'].status == Status.WAITING:
             return await ctx.send("セッションが開始されていません")
-        p = self.bot.game.players.get(ctx.author.id)
+        p = self.bot.games[f'{ctx.guild.id}'].players.get(ctx.author.id)
         filename = f'{ctx.author.name}log.txt'
         with open(filename,'w') as f:
             for log in p.logs:
@@ -80,19 +97,26 @@ class PlayerCog(commands.Cog):
     @commands.command(aliases=['d'])
     async def dice(self, ctx, d_count=3, d_max=6):
 
+        if f'{ctx.guild.id}' not in self.bot.games:
+            self.bot.games[f'{ctx.guild.id}'] = Game()
+
+
         msg, num = diceroll(d_count,d_max)
         await ctx.send(f'{ctx.author.name}さんの{d_count}D{d_max}\n{msg}')
 
-        if self.bot.game.status == Status.PLAYING:
+        if self.bot.games[f'{ctx.guild.id}'].status == Status.PLAYING:
             voice_client = ctx.message.guild.voice_client
             ffmpeg_audio_source = discord.FFmpegPCMAudio("dice.mp3")
             voice_client.play(ffmpeg_audio_source)
-        if self.bot.game.players.is_joined(ctx.author.id):
-            self.bot.game.logs.append(f'{ctx.author.name}さんの{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
-            self.bot.game.players.get(ctx.author.id).logs.append(f'{d_count}D{d_max} -> {num} :: <{self.bot.game.get_time()}>')
+        if self.bot.games[f'{ctx.guild.id}'].players.is_joined(ctx.author.id):
+            self.bot.games[f'{ctx.guild.id}'].logs.append(f'{ctx.author.name}さんの{d_count}D{d_max} -> {num} :: <{Game.get_time()}>')
+            self.bot.games[f'{ctx.guild.id}'].players.get(ctx.author.id).logs.append(f'{d_count}D{d_max} -> {num} :: <{Game.get_time()}>')
 
     @commands.command(aliases=['dd'])
     async def d100(self, ctx, limit=-1):
+
+        if f'{ctx.guild.id}' not in self.bot.games:
+            self.bot.games[f'{ctx.guild.id}'] = Game()
 
         r = _random(100)
         msg = ""
@@ -109,23 +133,27 @@ class PlayerCog(commands.Cog):
                 msg = f'1D100の結果は{r}で失敗'
         await ctx.send(f'{ctx.author.name}さんの{msg}')
 
-        if self.bot.game.status == Status.PLAYING:
+        if self.bot.games[f'{ctx.guild.id}'].status == Status.PLAYING:
             voice_client = ctx.message.guild.voice_client
             ffmpeg_audio_source = discord.FFmpegPCMAudio("dice.mp3")
             voice_client.play(ffmpeg_audio_source)
-        if self.bot.game.players.is_joined(ctx.author.id):
-            self.bot.game.logs.append(f'{ctx.author.name}さんの{msg} :: <{self.bot.game.get_time()}>')
-            self.bot.game.players.get(ctx.author.id).logs.append(f'{msg} :: <{self.bot.game.get_time()}>')
+        if self.bot.games[f'{ctx.guild.id}'].players.is_joined(ctx.author.id):
+            self.bot.games[f'{ctx.guild.id}'].logs.append(f'{ctx.author.name}さんの{msg} :: <{Game.get_time()}>')
+            self.bot.games[f'{ctx.guild.id}'].players.get(ctx.author.id).logs.append(f'{msg} :: <{Game.get_time()}>')
     
     @commands.command(aliases=['sd'])
     async def secret(self, ctx):
+
+        if f'{ctx.guild.id}' not in self.bot.games:
+            self.bot.games[f'{ctx.guild.id}'] = Game()
+            
         r = _random(100)
         msg = f'シークレットダイスの結果は{r}です'
         user_id = ctx.message.author.id
         user = self.bot.get_user(user_id)
         await user.send(msg)
-        if self.bot.game.players.is_joined(ctx.author.id):
-            self.bot.game.players.get(ctx.author.id).logs.append(f'{msg} :: <{self.bot.game.get_time()}>')
+        if self.bot.games[f'{ctx.guild.id}'].players.is_joined(ctx.author.id):
+            self.bot.games[f'{ctx.guild.id}'].players.get(ctx.author.id).logs.append(f'{msg} :: <{Game.get_time()}>')
 
         
 
