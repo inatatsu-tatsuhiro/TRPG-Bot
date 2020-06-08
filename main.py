@@ -3,7 +3,7 @@ import os
 import traceback # エラー表示のためにインポート
 from cogs.utils.game import Game
 
-bot = commands.Bot(command_prefix='!')
+bot = commands.Bot(command_prefix='!!')
 bot.games = {}
 EXTENSIONS = [
     'cogs.gamestatus',
@@ -13,4 +13,4 @@ EXTENSIONS = [
 for extension in EXTENSIONS:
     bot.load_extension(extension)
 
-bot.run(os.environ["TESTTOKEN"])
+bot.run(os.environ["TOKEN"])
