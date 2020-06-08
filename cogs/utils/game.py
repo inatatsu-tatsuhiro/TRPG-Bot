@@ -19,7 +19,7 @@ class Game():
         self.players = Players()
         self.logs = []
 
-
+    @classmethod
     def get_time(self):
         JST = timezone(timedelta(hours=+9), 'JST')
         t = str(datetime.now(JST)).split(".")[0]

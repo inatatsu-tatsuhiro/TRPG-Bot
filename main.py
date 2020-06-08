@@ -4,7 +4,7 @@ import traceback # エラー表示のためにインポート
 from cogs.utils.game import Game
 
 bot = commands.Bot(command_prefix='!')
-bot.game = Game()
+bot.games = {}
 EXTENSIONS = [
     'cogs.gamestatus',
     'cogs.player'

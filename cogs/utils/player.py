@@ -15,6 +15,9 @@ class Player():
         self.is_GM = gm
         self.logs = []
 
+    def __eq__(self, other):
+        return self.id == other
+
     
 
 class Players(list):
