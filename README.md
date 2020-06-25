@@ -5,6 +5,10 @@ Discord上でTRPG(CoC)をプレイする際の補助Bot
 # DEMO
 準備中(bot アイコン作成中)
 
+
+# Install
+https://discord.com/api/oauth2/authorize?client_id=509029821842456576&permissions=0&scope=bot
+
 # Features
 オンラインセッションで必須なダイス機能や、セッションのログをDiscord単体で管理することができます。  
 ダイス音がVoiceChatに流れるため、雰囲気もGoodです。
