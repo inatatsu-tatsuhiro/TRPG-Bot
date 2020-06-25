@@ -7,7 +7,7 @@ Discord上でTRPG(CoC)をプレイする際の補助Bot
 
 
 # Install
-https://discord.com/api/oauth2/authorize?client_id=509029821842456576&permissions=0&scope=bot
+[Discordへの追加](https://discord.com/api/oauth2/authorize?client_id=509029821842456576&permissions=0&scope=bot)
 
 # Features
 オンラインセッションで必須なダイス機能や、セッションのログをDiscord単体で管理することができます。  
@@ -113,11 +113,12 @@ Voice Chatにて効果音(サイコロ)を鳴らす。
 1d100の結果をコマンド使用者のDMに送信する
 
 # Author
-- いなたつ  
-- [Twitter @_inatatsu_csg](https://twitter.com/_inatatsu_csg_)  
-- [Qiita inatatsu_csg](https://qiita.com/inatatsu_csg)  
+いなたつ
+<a href="https://twitter.com/_inatatsu_csg_">Twitter @_inatatsu_csg_</a><br>
+<a href="https://qiita.com/inatatsu_csg">Qiita inatatsu_csg</a><br>
 
 # Sound
 サイコロの音源にて使用させていただきました。
 
 ■サイト名：On-Jin ～音人～　■サイトアドレス：https://on-jin.com/
+
