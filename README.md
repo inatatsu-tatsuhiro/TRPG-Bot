@@ -113,7 +113,7 @@ Voice Chatにて効果音(サイコロ)を鳴らす。
 1d100の結果をコマンド使用者のDMに送信する
 
 # Author
-いなたつ
+いなたつ<br>
 <a href="https://twitter.com/_inatatsu_csg_">Twitter @_inatatsu_csg_</a><br>
 <a href="https://qiita.com/inatatsu_csg">Qiita inatatsu_csg</a><br>
 
